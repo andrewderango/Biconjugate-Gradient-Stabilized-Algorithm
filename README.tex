@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage{graphicx}
 \usepackage{ragged2e} % load the package for justification
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
@@ -309,11 +310,38 @@ Add CSR format of LFAT5.mtx.
 
 As mentioned in Chapter 1, sparse pattern visualizations were implemented to determine the pattern of non-zero numbers in the input matrix. These can be seen below:
 
-Add PNG file(s).
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.25\textwidth]{LFAT5_sparsity_pattern.png}
+  \caption{Sparse Pattern Image of \codebox{LFAT5.mtx}.}
+  \label{fig:your_image}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.25\textwidth]{LF10_sparsity_pattern.png}
+  \caption{Sparse Pattern Image of \codebox{LF10.mtx}.}
+  \label{fig:your_image}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.25\textwidth]{b1_ss_sparsity_pattern.png}
+  \caption{Sparse Pattern Image of \codebox{b1\_ss.mtx}.}
+  \label{fig:your_image}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.25\textwidth]{ex3_sparsity_pattern.png}
+  \caption{Sparse Pattern Image of \codebox{ex3.mtx}.}
+  \label{fig:your_image}
+\end{figure}
 
 \subsection{Performance}
 
 Add the table here.
-	
+
+Add Makefile summary
 	
 \end{document}
