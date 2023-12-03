@@ -13,18 +13,12 @@ int main(int argc, char *argv[]) {
     }
 
     // Convert mtx file to CSRMatrix
-    CSRMatrix* csrMatrix = (CSRMatrix*)malloc(sizeof(CSRMatrix));
+    CSRMatrix *csrMatrix = (CSRMatrix*)malloc(sizeof(CSRMatrix));
     if (csrMatrix == NULL) {
         fprintf(stderr, "Error allocating memory for CSRMatrix.\n");
         exit(EXIT_FAILURE);
     }
     ReadMMtoCSR(argv[1], csrMatrix);
-
-    // If the conversion failed, return an error
-    if (csrMatrix == NULL) {
-        fprintf(stderr, "Sorry, the file %s could not be opened or converted to the CSR format.\n", argv[1]);
-        return 1;
-    }
 
     // Print the CSRMatrix
     // printCSRMatrix(csrMatrix);
@@ -32,28 +26,31 @@ int main(int argc, char *argv[]) {
     // Create a PNG image representing the sparsity pattern of the matrix
     createSparsePatternImage(csrMatrix->col_ind, csrMatrix->row_ptr, csrMatrix->num_rows, csrMatrix->num_cols, argv[1]);
 
-    // Assume b is [1, 1, ..., 1]
-    double* b = (double*)malloc(csrMatrix->num_rows * sizeof(double));
+    // Initialize b and x vectors
+    double* b = (double*)malloc(csrMatrix->num_rows * sizeof(double)); // RHS vector initialization
     double* x = (double*)malloc(csrMatrix->num_rows * sizeof(double)); // Solution vector initialization
-    if (b == NULL || x == NULL) {
-        fprintf(stderr, "Error allocating memory for b or x vector.\n");
+    if (b == NULL) {
+        fprintf(stderr, "Error allocating memory for b vector.\n");
+        exit(EXIT_FAILURE);
+    } else if (x == NULL) {
+        fprintf(stderr, "Error allocating memory for x vector.\n");
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < csrMatrix->num_rows; i++) {
-        b[i] = 1.0;
-        x[i] = 0.0;
+        b[i] = 1.0; // Assume b = [1, 1, ...]
+        x[i] = 0.0; // Initial BiCGSTAB guess is x = [0, 0, ...]
     }
 
     // Solve via BiCGSTAB and time it
     clock_t start = clock();
     bicgstab(csrMatrix, b, x, 1e-7, 10000);
     
-    // Compute BiCGSTAB residual
+    // Compute BiCGSTAB residual norm
     double* Ax = (double*)malloc(csrMatrix->num_rows * sizeof(double));
     spmv_csr(csrMatrix, x, Ax);
     double bicgstab_residual = 0.0;
     for (int i = 0; i < csrMatrix->num_rows; i++) {
-        bicgstab_residual += (Ax[i] - b[i]) * (Ax[i] - b[i]);
+        bicgstab_residual += (Ax[i] - b[i]) * (Ax[i] - b[i]); // Residual = Ax - b
         // printf("%lf ", x[i]); // Use this to print x
     }
     bicgstab_residual = sqrt(bicgstab_residual);
@@ -64,7 +61,7 @@ int main(int argc, char *argv[]) {
     spmv_csr(csrMatrix, x, Ax);
     double conj_grad_residual = 0.0;
     for (int i = 0; i < csrMatrix->num_rows; i++) {
-        conj_grad_residual += (Ax[i] - b[i]) * (Ax[i] - b[i]);
+        conj_grad_residual += (Ax[i] - b[i]) * (Ax[i] - b[i]); // Residual = Ax - b
         // printf("%lf ", x[i]); // Use this to print x
     }
     conj_grad_residual = sqrt(conj_grad_residual);

@@ -17,11 +17,10 @@ typedef struct {
 } MTXRow;
 
 void ReadMMtoCSR(const char *filename, CSRMatrix *matrix);
-void spmv_csr(const CSRMatrix *A, const double *x, double *y);
-void printCSRMatrix(CSRMatrix *matrix);
 int compareMTXData(const void* a, const void* b);
+void createSparsePatternImage(const int *columns, const int *row_ptr, int num_rows, int num_cols, const char *mtx_file_name);
+void spmv_csr(const CSRMatrix *A, const double *x, double *y);
 void bicgstab(CSRMatrix *A, double *b, double *x, double tolerance, int max_iterations);
 void conjugate_gradient(CSRMatrix *A, double *b, double *x, double tolerance, int max_iterations);
-void createSparsePatternImage(const int *columns, const int *row_ptr, int num_rows, int num_cols, const char *mtx_file_name);
 
 #endif
