@@ -1,0 +1,319 @@
+\documentclass[12pt]{article}
+\usepackage{ragged2e} % load the package for justification
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usetikzlibrary{fadings}
+\usepackage{filecontents}
+\usepackage{multirow}
+\usepackage{amsmath}
+\pgfplotsset{width=10cm,compat=1.17}
+\setlength{\parskip}{0.75em} % Set the space between paragraphs
+\usepackage{setspace}
+\setstretch{1.2} % Adjust the value as per your preference
+\usepackage[margin=2cm]{geometry} % Adjust the margin
+\setlength{\parindent}{0pt} % Adjust the value for starting paragraph
+\usetikzlibrary{arrows.meta}
+\usepackage{mdframed}
+\usepackage{float}
+
+\usepackage{hyperref}
+
+% to remove the hyperline rectangle
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=blue
+}
+
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{lipsum} % Example text package
+\usepackage{fancyhdr} % Package for customizing headers and footers
+
+
+
+% Define the orange color
+\definecolor{myorange}{RGB}{255,65,0}
+% Define a new color for "cherry" (dark red)
+\definecolor{cherry}{RGB}{148,0,25}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apply the custom footer to all pages
+\pagestyle{fancy}
+
+% Redefine the header format
+\fancyhead{}
+\fancyhead[R]{\textcolor{orange!80!black}{\itshape\leftmark}}
+
+\fancyhead[L]{\textcolor{black}{\thepage}}
+
+
+% Redefine the footer format with a line before each footnote
+\fancyfoot{}
+\fancyfoot[C]{\footnotesize P. Pasandide, McMaster University, Programming for Mechatronics - MECHTRON 2MP3. \footnoterule}
+
+% Redefine the footnote rule
+\renewcommand{\footnoterule}{\vspace*{-3pt}\noindent\rule{0.0\columnwidth}{0.4pt}\vspace*{2.6pt}}
+
+% Set the header rule color to orange
+\renewcommand{\headrule}{\color{orange!80!black}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}
+
+% Set the footer rule color to orange (optional)
+\renewcommand{\footrule}{\color{black}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Set the color for the section headings
+\titleformat{\section}
+{\normalfont\Large\bfseries\color{orange!80!black}}{\thesection}{1em}{}
+
+% Set the color for the subsection headings
+\titleformat{\subsection}
+{\normalfont\large\bfseries\color{orange!80!black}}{\thesubsection}{1em}{}
+
+% Set the color for the subsubsection headings
+\titleformat{\subsubsection}
+{\normalfont\normalsize\bfseries\color{orange!80!black}}{\thesubsubsection}{1em}{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the color for the table of contents
+\titlecontents{section}
+[1.5em]{\color{orange!80!black}}
+{\contentslabel{1.5em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+% Set the color for the subsections in the table of contents
+\titlecontents{subsection}
+[3.8em]{\color{orange!80!black}}
+{\contentslabel{2.3em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+% Set the color for the subsubsections in the table of contents
+\titlecontents{subsubsection}
+[6em]{\color{orange!80!black}}
+{\contentslabel{3em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% set a format for the codes inside a box with C format
+\lstset{
+	language=C,
+	basicstyle=\ttfamily,
+	backgroundcolor=\color{blue!5},
+	keywordstyle=\color{blue},
+	commentstyle=\color{codegreen},
+	stringstyle=\color{red},
+	showstringspaces=false,
+	breaklines=true,
+	frame=single,
+	rulecolor=\color{lightgray!35}, % Set the color of the frame
+	numbers=none,
+	numberstyle=\tiny,
+	numbersep=5pt,
+	tabsize=1,
+	morekeywords={include},
+	alsoletter={\#},
+	otherkeywords={\#}
+}
+
+
+
+
+%\input listings.tex
+
+
+
+% Define a command for inline code snippets with a colored and rounded box
+\newtcbox{\codebox}[1][gray]{on line, boxrule=0.2pt, colback=blue!5, colframe=#1, fontupper=\color{cherry}\ttfamily, arc=2pt, boxsep=0pt, left=2pt, right=2pt, top=3pt, bottom=2pt}
+
+
+
+
+\tikzset{%
+	every neuron/.style={
+		circle,
+		draw,
+		minimum size=1cm
+	},
+	neuron missing/.style={
+		draw=none, 
+		scale=4,
+		text height=0.333cm,
+		execute at begin node=\color{black}$\vdots$
+	},
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define a new tcolorbox style with default options
+\tcbset{
+	myboxstyle/.style={
+		colback=orange!10,
+		colframe=orange!80!black,
+	}
+}
+
+% Define a new tcolorbox style with default options to print the output with terminal style
+
+
+\tcbset{
+	myboxstyleTerminal/.style={
+		colback=blue!5,
+		frame empty, % Set frame to empty to remove the fram
+	}
+}
+
+\mdfdefinestyle{myboxstyleTerminal1}{
+	backgroundcolor=blue!5,
+	hidealllines=true, % Remove all lines (frame)
+	leftline=false,     % Add a left line
+}
+
+
+\begin{document}
+	
+	\justifying
+	
+	\begin{center}
+		\textbf{{\large MECHTRON 2MP3 Assignment 3}}
+		
+		\textbf{Developing a Biconjugate Gradient Stabilized Algorithm in C}
+		
+		Andrew De Rango, 400455362
+	\end{center}
+	
+		
+	
+	
+	\section{Introduction}
+
+\subsection{Assignment Overview}
+
+    The goal of this assignment was to develop a program in C that is capable of solving first-order linear systems of equations. These systems are of the form Ax=b, where A is a known matrix, b is a known vector, and x is a vector whose elements must be solved for. The algorithm should be capable to solving very large and sparse matrices, up to millions of rows. In developing a solution, two parameters must be optimized/minimized: The runtime and the norm of the residual vector. The residual norm, or rather the magnitude of the residual vector, was the measure used to illustrate the accuracy of the solution given and can be defined by \( ||Ax - b|| \).
+
+    It should be noted that very large matrices can impose significant memory issues when running the program. As the matrices being dealt with are sparse, it is better to store the matrices in CSR format, rather than storing every element of the 2D array in memory. This not only minimizes the memory allocated and reduces the incidence of segmentation fault, but it also improves runtime.
+
+    Furthermore, it would take a very long time to read the given matrices if each of their elements were given in a file. This would entail reading trillions of values, which is simply infeasible. To overcome this issue, files were provided and read from MTX format. For further information regarding MTX formatting, visit the Given Files folder of this repo.
+
+\subsection{Approach}
+
+            The general process that the program developed for this assignment undergoes is described in this section. 
+    
+    First, it reads information from the MTX file and converts it directly to the CSR format. Then, it checks if the matrix is triangular. If the matrix is triangular, then it asks the user if they intended to solve the linear system where A is a simply the triangular matrix as provided, or if A was intended to be the corresponding symmetrical matrix. This occurs because a triangular matrix and its symmetrical counterpart, obtained by reflecting one triangular obliquely onto the other triangle, would have the same MTX file. In MTX format, there is no way to discern the triangular matrix from the symmetrical. If the user decides to symmetrise the matrix, or reflect the triangle obliquely to the other triangle, then the program completes the rest of the operations using the symmetrical matrix.
+
+    Next, the program uses the \codebox{png.h} library to generate a PNG file that shows the sparsity of the matrix. This is an image that shows the sparsity pattern of the matrix, represented by black and white pixels showing where non-zero values exist in the matrix. White represents non-zero elements, while black pixels represent zeros. It creates a new directory if one has not already been created to add the PNG file to. The PNG file is always added to a folder in the directory that the user is currently in called \textit{Sparsity Pattern Images}. The program notifies the user of this and specifies the file name and directory.
+
+    Following this, the program undergoes the iterative Biconjugate Gradient Stabilized (BiCGSTAB) algorithm and returns a solution vector x. It then computes and stores the residual and its norm. The program then executes the Conjugate Gradient algorithm and stores its residual norm. The program then compares the residual norms and takes the better (lower) one. The program calculates the program runtime, which accounts for both algorithms combined.
+
+	\section{Implementation in C}
+
+\subsection{Structure Overview}
+ 
+	The code can be broken down into four files:
+	
+	\begin{itemize}
+		\item \codebox{Makefile}: Defines rules to be employed upon compilation.
+		\item \codebox{functions.h}: Contains function prototypes that are formally defined in \codebox{functions.c}
+		\item \codebox{main.c}: Contains the main function that calls functions from \codebox{functions.c}
+		\item \codebox{functions.c}: Defines all functions other than \codebox{int main} such as \codebox{spvm\_csr}, \codebox{bicgstab}, \codebox{conjugate\_gradient}, and more.
+	\end{itemize}
+
+\subsection{Parameter Adjustment}
+ 
+        There exists four arbitrary parameters within the program that may significantly change the resultant solution for x, and thus the residual vector and its norm. They are defined in the following lines:
+	\begin{lstlisting}
+		bicgstab(csrMatrix, b, x, 1e-7, 10000);
+		conjugate_gradient(csrMatrix, b, x, 1e-7, 10000);
+	\end{lstlisting}
+Both the BiCGSTAB and Conjugate Gradient algorithms take in the parameters \codebox{tolerance} and \codebox{max\_iterations}. Above, they are defined as 0.0000001 and 10,000 respectively.
+ 
+ \begin{itemize}
+     \item \codebox{tolerance}: The iterations stop once the residual norm converges to below this specified tolerance. This should depend on the accuracy that the user is looking for in their specific circumstance.
+     \item \codebox{max\_iterations}: If the algorithms can't converge, then the iterations will stop after \codebox{max\_iterations} iterations. This helps deal with cases in which BiCGSTAB will take a long time to converge to the true solution.
+ \end{itemize}
+	
+	\subsection{Makefile Summary}
+	
+	The Makefile supplied with the BiCGSTAB repository can be seen below:
+
+ 	\begin{mdframed}[style=myboxstyleTerminal1]
+		\begin{verbatim}
+CC = gcc
+CFLAGS = -Wall -Wextra -O2 $(shell pkg-config --cflags libpng)
+LIBS = $(shell pkg-config --libs libpng)
+
+all: bicgstab
+
+bicgstab: main.o functions.o
+	$(CC) $(CFLAGS) -o bicgstab main.o functions.o $(LIBS)
+
+main.o: main.c functions.h
+	$(CC) $(CFLAGS) -c main.c
+
+functions.o: functions.c functions.h
+	$(CC) $(CFLAGS) -c functions.c
+
+clean:
+	rm -f *.o bicgstab
+		\end{verbatim}
+	\end{mdframed}
+
+This Makefile is a set of instructions instigated from the command line that aids in the compilation and linking processes of potentially multiple source code files. An example is shown in the code block above. Here are the roles of the individual components within the Makefile:
+
+\codebox{CC=gcc}: CC sets the compiler that will be used to compile the program. In this case, we are using gcc.
+
+\codebox{CFLAGS= -Wall -Wextra -g -O2}: CFLAGS lists the flags that will be used by the compiler defined above. Each dash represents a precursor for another flag.  -Wall enables the compiler to display warning messages upon compilation, such as declared but unused variables within the program. -Wextra provides more potential warnings. -g enables the compiler to provide debugging information, and -O3 enables possible optimizations within the program to further reduce the computation time.
+
+\codebox{TARGET=GA}: TARGET defines the name of the final executable that will be placed in the same directory. This name ('GA' in this case) will need to be called in the command line to run the program.
+
+\codebox{SRC=GA.c functions.c OF.c}: Define the source files containing C code that need to be compiled. Did not include functions.h because it is a header file and only contains function prototypes; not executable C code.
+
+\codebox{OBJ=\$(SRC:.c=.o)}: Creates object files with .o extension for each of the files defined in the SRC component above.
+
+\codebox{\$(TARGET): \$(OBJ)}: This states that the target files are dependent on the object files. Thus, if there are changes made to the object files defined above, the target (GA) will need to be rebuilt.
+
+\codebox{\$(CC) \$(CFLAGS) -o \$(TARGET) \$(OBJ)}: Responsible for building the target file, GA, from the compiler. With this, it sends along the flags and other specified parameters as defined above.
+
+\codebox{\%.o: \%.c}: This is a pattern rule. It defines how to generate the .o file from the .c file.
+
+\codebox{\$(CC) \$(CFLAGS) -c \$<}: Command that is run which helps the construction of an object file from a C file. This command passes the flags specified in \codebox{CFLAGS}. The -c option causes the compiler to generate the object file.
+
+\codebox{clean}: This is an independent rule. It does not depend on any of the parameters defined above.
+
+\codebox{rm -f \$(OBJ) \$(TARGET)}: If the user runs the command \codebox{make clean} in the command line, then this is the function that will be executed. It removes the object files and final executables to clean up the repository. This is run before every commit.
+
+\subsection{VTune Analysis}
+
+The VTune and gcov portions of this assignment could not be completed because VTune and gcov are not available on Apple silicon processors.
+
+\subsection{CSR Formatting}
+
+Add CSR format of LFAT5.mtx.
+
+\section{Results}
+
+\subsection{Sparse Pattern Visualization}
+
+As mentioned in Chapter 1, sparse pattern visualizations were implemented to determine the pattern of non-zero numbers in the input matrix. These can be seen below:
+
+Add PNG file(s).
+
+\subsection{Performance}
+
+Add the table here.
+	
+	
+\end{document}
