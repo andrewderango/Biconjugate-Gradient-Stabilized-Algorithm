@@ -29,7 +29,7 @@ void spmv_csr(const CSRMatrix *A, const double *x, double *y) {
     }
 }
 
-void printCSRMatrix(CSRMatrix* matrix) {
+void printCSRMatrix(CSRMatrix *matrix) {
     printf("CSR Matrix:\n");
     printf("Number of Rows: %d\n", matrix->num_rows);
     printf("Number of Columns: %d\n", matrix->num_cols);
@@ -56,7 +56,7 @@ void printCSRMatrix(CSRMatrix* matrix) {
 }
 
 // Comparison function for MTXRow
-int compareMTXData(const void* a, const void* b) {
+int compareMTXData(const void *a, const void *b) {
     MTXRow* rowA = (MTXRow*)a;
     MTXRow* rowB = (MTXRow*)b;
 
@@ -68,7 +68,7 @@ int compareMTXData(const void* a, const void* b) {
     }
 }
 
-void bicgstab(CSRMatrix* A, double* b, double* x, double tolerance, int max_iterations) {
+void bicgstab(CSRMatrix *A, double *b, double *x, double tolerance, int max_iterations) {
     double* Ax = (double*)malloc(A->num_rows * sizeof(double)); // LHS vector
     double* r = (double*)malloc(A->num_rows * sizeof(double)); // Residual vector
     double* r_hat = (double*)malloc(A->num_rows * sizeof(double)); // Biorthogonalized residual vector
@@ -241,7 +241,7 @@ void conjugate_gradient(CSRMatrix* A, double* b, double* x, double tolerance, in
     }
 }
 
-void ReadMMtoCSR(const char* filename, CSRMatrix* matrix) {
+void ReadMMtoCSR(const char *filename, CSRMatrix *matrix) {
     // Try to open file
     FILE *file = NULL;
     file = fopen(filename, "r"); // Returns pointer to file if successful or NULL if unsuccessful
@@ -411,7 +411,7 @@ void ReadMMtoCSR(const char* filename, CSRMatrix* matrix) {
 }
 
 // Function to create a PNG image representing the sparsity pattern of a CSR matrix ###
-void createSparsePatternImage(const double* values, const int* columns, const int* row_ptr, int num_rows, int num_cols, const char* mtx_file_name) {
+void createSparsePatternImage(const double *values, const int *columns, const int *row_ptr, int num_rows, int num_cols, const char *mtx_file_name) {
     if (num_rows > 50000 || num_cols > 50000) {
         fprintf(stderr, "Sorry, the matrix is too large to create a sparsity pattern image.\n");
         return;

@@ -1,8 +1,6 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-// ###########################################################
-// Do not change this part
 typedef struct {
     double *csr_data;   // Array of non-zero values
     int *col_ind;       // Array of column indices
@@ -12,21 +10,18 @@ typedef struct {
     int num_cols;       // Number of columns in matrix
 } CSRMatrix;
 
+typedef struct {
+    int row;            // Index of row in matrix
+    int col;            // Index of column in matrix
+    double value;       // Value of specific element in matrix
+} MTXRow;
 
 void ReadMMtoCSR(const char *filename, CSRMatrix *matrix);
 void spmv_csr(const CSRMatrix *A, const double *x, double *y);
-
-// ###########################################################
-
-/* <Here you can add the declaration of functions you need.>
-<The actual implementation must be in functions.c>
-Here what "potentially" you need:
-1. A function called "solver" receiving const CSRMatrix A, double *b, double *x 
-and solving the linear system 
-2. A function called "compute_residual" to compute the residual like r=Ax-b.
-This shows how much x values you found are accurate, but 
-printing the whole vector r might not be a good idea. So
-3. A function called compute_norm to compute the norm of vector residual
-*/
+void printCSRMatrix(CSRMatrix *matrix);
+int compareMTXData(const void* a, const void* b);
+void bicgstab(CSRMatrix *A, double *b, double *x, double tolerance, int max_iterations);
+void conjugate_gradient(CSRMatrix *A, double *b, double *x, double tolerance, int max_iterations);
+void createSparsePatternImage(const int *columns, const int *row_ptr, int num_rows, int num_cols, const char *mtx_file_name);
 
 #endif
