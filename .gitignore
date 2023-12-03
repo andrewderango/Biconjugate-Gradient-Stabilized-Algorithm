@@ -1,12 +1,14 @@
 .DS_Store
 
-LFAT5.mtx
-LF10.mtx
-b1_ss.mtx
-ex3.mtx
-jnlbrng1.mtx
+# Given matrices
+# LFAT5.mtx
+# LF10.mtx
+# b1_ss.mtx
+# ex3.mtx
+# jnlbrng1.mtx
 
-2cubes_sphere.mtx
-ACTIVSg70K.mtx
-tmt_sym.mtx
-StocF-1465.mtx
+# Bonus
+# 2cubes_sphere.mtx
+# ACTIVSg70K.mtx
+# tmt_sym.mtx
+# StocF-1465.mtx
