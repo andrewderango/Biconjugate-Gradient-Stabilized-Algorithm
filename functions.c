@@ -4,6 +4,8 @@
 #include <time.h>
 #include <png.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include "functions.h"
 
 void spmv_csr(const CSRMatrix *A, const double *x, double *y) {
@@ -449,9 +451,20 @@ void createSparsePatternImage(const int *columns, const int *row_ptr, int num_ro
         rows[i] = &pixel_data[i * image_width];
     }
 
+    // Check if the directory exists
+    struct stat st = {0};
+    if (stat("Sparsity Pattern Images", &st) == -1) {
+        // Create the directory
+        #ifdef _WIN32
+        _mkdir("Sparsity Pattern Images");
+        #else
+        mkdir("Sparsity Pattern Images", 0700);
+        #endif
+    }
+
     // Write the image data to a file
     char file_name[256];  // Adjust the size as needed
-    sprintf(file_name, "%s_sparsity_pattern.png", base_name);
+    sprintf(file_name, "Sparsity Pattern Images/%s_sparsity_pattern.png", base_name);
     FILE* fp = fopen(file_name, "wb");
     if (!fp) abort();
 
