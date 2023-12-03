@@ -95,92 +95,103 @@ void bicgstab(CSRMatrix* A, double* b, double* x, double tolerance, int max_iter
     double omega = 1.0; // Step size for stabilization. Omega = (rhat*r)/(rhat*v)
     double* v = (double*)malloc(A->num_rows * sizeof(double)); // Temporary storage of A * p
     double* p = (double*)malloc(A->num_rows * sizeof(double)); // Search direction vector
+    double best_residual; // Best residual so far
+    double* best_x = (double*)malloc(A->num_rows * sizeof(double)); // Best solution so far
+
+    if (Ax == NULL || r == NULL || r_hat == NULL || v == NULL || p == NULL || best_x == NULL) {
+        fprintf(stderr, "Error allocating memory for vectors in BiCGSTAB function.\n");
+        exit(EXIT_FAILURE);
+    }
 
     spmv_csr(A, x, Ax);
 
-    printf("\nAx: ");
-    for (int i = 0; i < A->num_rows; i++) {
-        printf("%lf ", Ax[i]);
-    }
+    // printf("\nAx: ");
+    // for (int i = 0; i < A->num_rows; i++) {
+    //     printf("%lf ", Ax[i]);
+    // }
     // for (int i = 0; i < A->num_rows; i++) {
     //     r[i] = b[i] - Ax[i];
     //     r_hat[i] = r[i];
     //     p[i] = r[i];
     // }
 
-    printf("\nb: ");
-    for (int i = 0; i < A->num_rows; i++) {
-        printf("%lf ", b[i]);
-    }
-    printf("\nr: ");
+    // printf("\nb: ");
+    // for (int i = 0; i < A->num_rows; i++) {
+    //     printf("%lf ", b[i]);
+    // }
+    // printf("\nr: ");
     for (int i = 0; i < A->num_rows; i++) {
         r[i] = b[i] - Ax[i];
         r_hat[i] = r[i];
         v[i] = 0.0;
         p[i] = 0.0;
-        printf("%lf ", r[i]);
+        // printf("%lf ", r[i]);
     }
-    printf("\nn: %d\n", A->num_rows);
+    // printf("\nn: %d\n", A->num_rows);
 
-    printf("r_hat: ");
-    for (int i = 0; i < A->num_rows; i++) {
-        printf("%lf ", r_hat[i]);
-    }
-    printf("\n\n");
+    // printf("r_hat: ");
+    // for (int i = 0; i < A->num_rows; i++) {
+    //     printf("%lf ", r_hat[i]);
+    // }
+    // printf("\n\n");
 
     for (int iteration = 0; iteration < max_iterations; iteration++) {
-        printf("-- ITERATION %d --\n", iteration+1);
+        // printf("-- ITERATION %d --\n", iteration+1);
 
         double rho_new = 0.0;
         for (int i = 0; i < A->num_rows; i++) {
             rho_new += r_hat[i] * r[i];
         }
-        printf("rho_new: %f\n", rho_new);
+        // printf("rho_new: %f\n", rho_new);
 
         double beta = (rho_new / (rho + 1e-16)) * (alpha / (omega + 1e-16));
         rho = rho_new;
-        printf("beta: %f\n", beta);
+        // printf("beta: %f\n", beta);
 
         for (int i = 0; i < A->num_rows; i++) {
             p[i] = r[i] + beta * (p[i] - omega * v[i]);
         }
-        printf("p: ");
-        for (int i = 0; i < A->num_rows; i++) {
-            printf("%f ", p[i]);
-        }
-        printf("\n");
+        // printf("p: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%f ", p[i]);
+        // }
+        // printf("\n");
 
         spmv_csr(A, p, v);
-        printf("v: ");
-        for (int i = 0; i < A->num_rows; i++) {
-            printf("%f ", v[i]);
-        }
-        printf("\n");
+        // printf("v: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%f ", v[i]);
+        // }
+        // printf("\n");
 
         double dot_r_hat_v = 0.0;
         for (int i = 0; i < A->num_rows; i++) {
             dot_r_hat_v += r_hat[i] * v[i];
         }
         alpha = rho / dot_r_hat_v;
-        printf("alpha: %f\n", alpha);
+        // printf("alpha: %f\n", alpha);
 
         double* s = (double*)malloc(A->num_rows * sizeof(double)); // Temporary storage r - alpha * v
         double* t = (double*)malloc(A->num_rows * sizeof(double)); // Temporary storage A * s
+        if (s == NULL || t == NULL) {
+            fprintf(stderr, "Error allocating memory for s or t vector.\n");
+            exit(EXIT_FAILURE);
+        }
         for (int i = 0; i < A->num_rows; i++) {
             s[i] = r[i] - alpha * v[i];
         }
-        printf("s: ");
-        for (int i = 0; i < A->num_rows; i++) {
-            printf("%f ", s[i]);
-        }
-        printf("\n");
+        // printf("s: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%f ", s[i]);
+        // }
+        // printf("\n");
 
         spmv_csr(A, s, t);
-        printf("t: ");
-        for (int i = 0; i < A->num_rows; i++) {
-            printf("%f ", t[i]);
-        }
-        printf("\n");
+        // printf("t: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%f ", t[i]);
+        // }
+        // printf("\n");
 
         double dot_t_s = 0.0;
         double dot_t_t = 0.0;
@@ -190,32 +201,37 @@ void bicgstab(CSRMatrix* A, double* b, double* x, double tolerance, int max_iter
         }
 
         omega = dot_t_s / (dot_t_t + 1e-16);
-        printf("omega: %f\n", omega);
+        // printf("omega: %f\n", omega);
 
         for (int i = 0; i < A->num_rows; i++) {
             x[i] += alpha * p[i] + omega * s[i];
             r[i] = s[i] - omega * t[i];
         }
 
-        printf("x: ");
-        for (int i = 0; i < A->num_rows; i++) {
-            printf("%f ", x[i]);
-        }
-        printf("\n");
+        // printf("x: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%f ", x[i]);
+        // }
+        // printf("\n");
 
-        printf("r: ");
-        for (int i = 0; i < A->num_rows; i++) {
-            printf("%f ", r[i]);
-        }
-        printf("\n");
+        // printf("r: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%f ", r[i]);
+        // }
+        // printf("\n");
 
-        // Calculate norm of r
         double residual = 0.0;
         for (int i = 0; i < A->num_rows; i++) {
             residual += r[i] * r[i];
         }
         residual = sqrt(residual);
-        printf("Residual: %f\n", residual);
+        if (iteration == 0 || residual < best_residual) {
+            best_residual = residual;
+            for (int i = 0; i < A->num_rows; i++) {
+                best_x[i] = x[i];
+            }
+        }
+        printf("Iteration: %d\tResidual: %lf\n", iteration, residual);
 
         if (residual < tolerance) {
             break;
@@ -230,16 +246,141 @@ void bicgstab(CSRMatrix* A, double* b, double* x, double tolerance, int max_iter
     free(r_hat);
     free(v);
     free(p);
+
+    for (int i = 0; i < A->num_rows; i++) {
+        x[i] = best_x[i];
+    }
+    printf("Residual: %f\n", best_residual);
 }
 
-CSRMatrix* convert_to_csr_from_mtx(const char* filename) {
+void conjugate_gradient(CSRMatrix* A, double* b, double* x, double tolerance, int max_iterations) {
+    double* r = (double*)malloc(A->num_rows * sizeof(double)); // Residual vector
+    double* p = (double*)malloc(A->num_rows * sizeof(double)); // Search direction vector
+    double* Ap = (double*)malloc(A->num_rows * sizeof(double)); // Temporary storage of A * p
+    double alpha, beta;
+    double best_residual = 0.0;
+    double* best_x = (double*)malloc(A->num_rows * sizeof(double));
+
+    if (r == NULL || p == NULL || Ap == NULL || best_x == NULL) {
+        fprintf(stderr, "Error allocating memory for vectors in conjugate_gradient function.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    spmv_csr(A, x, Ap);
+
+    for (int i = 0; i < A->num_rows; i++) {
+        r[i] = b[i] - Ap[i];
+        p[i] = r[i];
+    }
+
+    // printf("n: %d\n", A->num_rows);
+    // printf("x: ");
+    // for (int i = 0; i < A->num_rows; i++) {
+    //     printf("%lf ", x[i]);
+    // }
+    // printf("\n");
+    // printf("r: ");
+    // for (int i = 0; i < A->num_rows; i++) {
+    //     printf("%lf ", r[i]);
+    // }
+    // printf("\n");
+    // printf("p: ");
+    // for (int i = 0; i < A->num_rows; i++) {
+    //     printf("%lf ", p[i]);
+    // }
+    // printf("\n");
+    double r_dot_r = 0;
+    for (int i = 0; i < A->num_rows; i++) {
+        r_dot_r += r[i]*r[i];
+    }
+
+    for (int iteration = 0; iteration < max_iterations; iteration++) {
+
+        spmv_csr(A, p, Ap);
+        
+        // assign p * Ap
+        double p_dot_Ap = 0.0;
+        for (int i = 0; i < A->num_rows; i++) {
+            p_dot_Ap += p[i] * Ap[i];
+        }
+    
+        double alpha = r_dot_r / (p_dot_Ap + 1e-16);
+        // printf("alpha: %lf\n", alpha);
+
+        for (int i = 0; i < A->num_rows; i++) {
+            x[i] += alpha * p[i];
+            r[i] -= alpha * Ap[i];
+        }
+        // printf("x: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%lf ", x[i]);
+        // }
+        // printf("\n");
+
+        // printf("r: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%lf ", r[i]);
+        // }
+        // printf("\n");
+
+        double r_dot_r_new = 0;
+        for (int i = 0; i < A->num_rows; i++) {
+            r_dot_r_new += r[i]*r[i];
+        }
+
+        double beta = r_dot_r_new / (r_dot_r + 1e-16);
+        // printf("beta: %lf\n", beta);
+
+        for (int i = 0; i < A->num_rows; i++) {
+            p[i] = r[i] + beta * p[i];
+        }
+        // printf("p: ");
+        // for (int i = 0; i < A->num_rows; i++) {
+        //     printf("%lf ", p[i]);
+        // }
+        // printf("\n");
+
+        r_dot_r = r_dot_r_new;
+
+        double residual = 0.0;
+        for (int i = 0; i < A->num_rows; i++) {
+            residual += r[i] * r[i];
+        }
+        residual = sqrt(residual);
+
+        if (iteration == 0 || residual < best_residual) {
+            best_residual = residual;
+            for (int i = 0; i < A->num_rows; i++) {
+                best_x[i] = x[i];
+            }
+        }
+
+        printf("Iteration: %d\tResidual: %lf\n", iteration, residual);
+
+        if (residual < tolerance) {
+            break;
+        }
+    }
+
+    free(r);
+    free(p);
+    free(Ap);
+
+    for (int i = 0; i < A->num_rows; i++) {
+        x[i] = best_x[i];
+    }
+    printf("Residual: %f\n", best_residual);
+}
+
+void ReadMMtoCSR(const char* filename, CSRMatrix* matrix) {
     // Try to open file
     FILE *file = NULL;
     file = fopen(filename, "r"); // Returns pointer to file if successful, NULL otherwise
 
-    // If the file doesn't exist, return NULL
+    // If the file doesn't exist, print an error message and quit the program
     if (file == NULL) {
-        return NULL;
+        perror("Error opening file");
+        exit(EXIT_FAILURE);
     }
 
     int rows, columns, nonzero_values, *row_ind;
@@ -254,8 +395,6 @@ CSRMatrix* convert_to_csr_from_mtx(const char* filename) {
     };
     sscanf(line, "%d %d %d", &rows, &columns, &nonzero_values); // First line of mtx has rows, columns, nonzero values
 
-    // Allocate memory for the CSRMatrix
-    CSRMatrix* matrix = (CSRMatrix*)malloc(sizeof(CSRMatrix));
     matrix->num_rows = rows;
     matrix->num_cols = columns;
     matrix->num_non_zeros = nonzero_values;
@@ -264,6 +403,11 @@ CSRMatrix* convert_to_csr_from_mtx(const char* filename) {
     matrix->col_ind = (int*)malloc(nonzero_values * sizeof(int));
     matrix->row_ptr = (int*)malloc((rows + 1) * sizeof(int));
     row_ind = (int*)malloc(nonzero_values * sizeof(int));
+
+    if (matrix->csr_data == NULL || matrix->col_ind == NULL || matrix->row_ptr == NULL || row_ind == NULL) {
+        fprintf(stderr, "Error allocating memory for CSRMatrix.\n");
+        exit(EXIT_FAILURE);
+    }
 
     // Initialize row_ptr to 0
     for (int i = 0; i < rows+1; i++) {
@@ -279,7 +423,7 @@ CSRMatrix* convert_to_csr_from_mtx(const char* filename) {
 
         if (mtx_column < max_col) {
             printf("This is improper MTX format. MTX format requires the column-index column to be ascending.\n");
-            return NULL;
+            exit(EXIT_FAILURE);
         } else {
             max_col = mtx_column;
         }
@@ -313,6 +457,10 @@ CSRMatrix* convert_to_csr_from_mtx(const char* filename) {
     }
 
     MTXRow* data = (MTXRow*)malloc(matrix->num_non_zeros * sizeof(MTXRow));
+    if (data == NULL) {
+        fprintf(stderr, "Error allocating memory for data.\n");
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < matrix->num_non_zeros; i++) {
         data[i].row = row_ind[i];
         data[i].col = matrix->col_ind[i];
@@ -392,6 +540,10 @@ CSRMatrix* convert_to_csr_from_mtx(const char* filename) {
 
             // Re-sort CSR data
             MTXRow* data = (MTXRow*)malloc(matrix->num_non_zeros * sizeof(MTXRow));
+            if (data == NULL) {
+                fprintf(stderr, "Error allocating memory for data.\n");
+                exit(EXIT_FAILURE);
+            }
             for (int i = 0; i < matrix->num_non_zeros; i++) {
                 data[i].row = row_ind[i];
                 data[i].col = matrix->col_ind[i];
@@ -418,33 +570,31 @@ CSRMatrix* convert_to_csr_from_mtx(const char* filename) {
         }
     }
 
-    printf("CSR Data: ");
-    for (int i = 0; i < matrix->num_non_zeros; i++) {
-        printf("%lf ", matrix->csr_data[i]);
-    }
-    printf("\n");
+    // printf("CSR Data: ");
+    // for (int i = 0; i < matrix->num_non_zeros; i++) {
+    //     printf("%lf ", matrix->csr_data[i]);
+    // }
+    // printf("\n");
     
-    printf("Column Indices: ");
-    for (int i = 0; i < matrix->num_non_zeros; i++) {
-        printf("%d ", matrix->col_ind[i]);
-    }
-    printf("\n");
+    // printf("Column Indices: ");
+    // for (int i = 0; i < matrix->num_non_zeros; i++) {
+    //     printf("%d ", matrix->col_ind[i]);
+    // }
+    // printf("\n");
 
-    printf("Row Indices: ");
-    for (int i = 0; i < matrix->num_non_zeros; i++) {
-        printf("%d ", row_ind[i]);
-    }
-    printf("\n");
+    // printf("Row Indices: ");
+    // for (int i = 0; i < matrix->num_non_zeros; i++) {
+    //     printf("%d ", row_ind[i]);
+    // }
+    // printf("\n");
 
-    printf("Row Pointers: ");
-    for (int i = 0; i < matrix->num_rows + 1; i++) {
-        printf("%d ", matrix->row_ptr[i]);
-    }
-    printf("\n");
+    // printf("Row Pointers: ");
+    // for (int i = 0; i < matrix->num_rows + 1; i++) {
+    //     printf("%d ", matrix->row_ptr[i]);
+    // }
+    // printf("\n");
 
     free(row_ind);
-
-    return matrix;
 }
 
 int main(int argc, char *argv[]) {
@@ -455,8 +605,15 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    clock_t start = clock();
+
     // Convert mtx file to CSRMatrix
-    CSRMatrix* csrMatrix = convert_to_csr_from_mtx(argv[1]);
+    CSRMatrix* csrMatrix = (CSRMatrix*)malloc(sizeof(CSRMatrix));
+    if (csrMatrix == NULL) {
+        fprintf(stderr, "Error allocating memory for CSRMatrix.\n");
+        exit(EXIT_FAILURE);
+    }
+    ReadMMtoCSR(argv[1], csrMatrix);
 
     // If the conversion failed, return an error
     if (csrMatrix == NULL) {
@@ -470,13 +627,28 @@ int main(int argc, char *argv[]) {
     // Assume b is [1, 1, ..., 1]
     double* b = (double*)malloc(csrMatrix->num_rows * sizeof(double));
     double* x = (double*)malloc(csrMatrix->num_rows * sizeof(double)); // Solution vector initialization
+    if (b == NULL || x == NULL) {
+        fprintf(stderr, "Error allocating memory for b or x vector.\n");
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < csrMatrix->num_rows; i++) {
         b[i] = 1.0;
         x[i] = 1.0;
     }
 
     // Solve via BiCGSTAB
-    bicgstab(csrMatrix, b, x, 1e-6, 1000);
+    bicgstab(csrMatrix, b, x, 1e-6, 100);
+    // for (int i = 0; i < csrMatrix->num_rows; i++) {
+    //     printf("%lf ", x[i]);
+    // }
+    printf("\n\n");
+
+    // Solve via Conjugate Gradient
+    conjugate_gradient(csrMatrix, b, x, 1e-6, 100);
+    // for (int i = 0; i < csrMatrix->num_rows; i++) {
+    //     printf("%lf ", x[i]);
+    // }
+    printf("\n");
 
     // Free the memory
     free(b);
@@ -486,9 +658,9 @@ int main(int argc, char *argv[]) {
     free(csrMatrix->row_ptr);
     free(csrMatrix);
 
+    clock_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Time Elapsed: %f seconds\n", time_spent);
+
     return 0;
 }
-
-// TODO:
-// check ###
-// late: cleanup
