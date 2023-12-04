@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 $(shell pkg-config --cflags libpng)
+CFLAGS = -Wall -Wextra -g -O2 $(shell pkg-config --cflags libpng)
 LIBS = $(shell pkg-config --libs libpng)
 
 all: bicgstab

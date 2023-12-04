@@ -219,6 +219,10 @@
 
     Following this, the program undergoes the iterative Biconjugate Gradient Stabilized (BiCGSTAB) algorithm and returns a solution vector x. It then computes and stores the residual and its norm. The program then executes the Conjugate Gradient algorithm and stores its residual norm. The program then compares the residual norms and takes the better (lower) one. The program calculates the program runtime, which accounts for both algorithms combined.
 
+\subsection{Biconjugate Gradient Stabilized Algorithm Overview}
+
+BiCGSTAB is a robust algorithm used to solve first-order linear systems of equations. It is an extension of the standard conjugate graduate method, in that it supports solutions for matrices that are both nonsymmetrical and indefinite. That is, the eigenvalues of the A matrix are not required to be positive in order to derive an accurate solution to the system. As an iterative method that uses the residual to define two new search directions (biconjugate gradient vectors), BiCGSTAB also has functionality that enforces stabilization which renders faster convergence.
+
 	\section{Implementation in C}
 
 \subsection{Structure Overview}
@@ -301,17 +305,15 @@ The CSR format of LFAT5.mtx can be seen below:
 
 Number of Non-Zeros: 46
 Row Pointer: 0 3 5 7 11 15 18 21 26 31 33 35 39 43 46 
-Column Index: 0 3 4 1 5 2 6 0 3 7 8 
-0 4 7 8 1 5 9 2 6 10 3 4 7 11 12 3 4 
-8 11 12 5 9 6 10 7 8 11 13 7 8 12 13 
-11 12 13 
-CSR Data: 1.570880 -94.252800 0.785440 12566400.000000 -6283200.000000 0.608806
--0.304403 -94.252800 15080.448000 -7540.224000 94.252800 0.785440 3.141760
--94.252800 0.785440 -6283200.000000 12566400.000000 -6283200.000000 -0.304403
-0.608806 -0.304403 -7540.224000 -94.252800 15080.448000 -7540.224000 94.252800
-94.252800 0.785440 3.141760  -94.252800 0.785440 -6283200.000000 12566400.000000
--0.304403 0.608806 -7540.224000 -94.252800 15080.448000 94.252800 94.252800
-0.785440 3.141760 0.785440 94.252800 0.785440 1.570880
+Column Index: 0 3 4 1 5 2 6 0 3 7 8 0 4 7 8 1 5 9 2 6 10 3 4 7 11 12 3 4 8 11 12
+5 9 6 10 7 8 11 13 7 8 12 13 11 12 13 
+CSR Data: 1.570880 -94.252800 0.785440 12566400.000000 -6283200.000000 
+0.608806 -0.304403 -94.252800 15080.448000 -7540.224000 94.252800 0.785440
+3.141760 -94.252800 0.785440 -6283200.000000 12566400.000000 -6283200.000000 
+-0.304403 0.608806 -0.304403 -7540.224000 -94.252800 15080.448000 -7540.224000
+94.252800 94.252800 0.785440 3.141760  -94.252800 0.785440 -6283200.000000
+12566400.000000 -0.304403 0.608806 -7540.224000 -94.252800 15080.448000 
+94.252800 94.252800 0.785440 3.141760 0.785440 94.252800 0.785440 1.570880
 
 		\end{verbatim}
 	\end{mdframed}

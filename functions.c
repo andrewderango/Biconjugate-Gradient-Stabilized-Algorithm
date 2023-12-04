@@ -132,7 +132,7 @@ void ReadMMtoCSR(const char *filename, CSRMatrix *matrix) {
     if (upper_triangular == 1 || lower_triangular == 1) {
         char symmetrise;
         scanf(" %c", &symmetrise);
-        while (symmetrise != 'y' && symmetrise != 'Y' && symmetrise != '1' && symmetrise != 'n' && symmetrise != 'N' && symmetrise != '0') { // fix ###
+        while (symmetrise != 'y' && symmetrise != 'Y' && symmetrise != '1' && symmetrise != 'n' && symmetrise != 'N' && symmetrise != '0') {
             printf("Invalid response. Please enter Y or N: ");
             scanf(" %c", &symmetrise);
         }

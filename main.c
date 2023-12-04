@@ -20,9 +20,6 @@ int main(int argc, char *argv[]) {
     }
     ReadMMtoCSR(argv[1], csrMatrix);
 
-    // Print the CSRMatrix
-    // printCSRMatrix(csrMatrix);
-
     // Create a PNG image representing the sparsity pattern of the matrix
     createSparsePatternImage(csrMatrix->col_ind, csrMatrix->row_ptr, csrMatrix->num_rows, csrMatrix->num_cols, argv[1]);
 
