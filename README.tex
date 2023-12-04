@@ -276,21 +276,13 @@ This Makefile is a set of instructions instigated from the command line that aid
 
 \codebox{CC=gcc}: CC sets the compiler that will be used to compile the program. In this case, we are using gcc.
 
-\codebox{CFLAGS= -Wall -Wextra -g -O2}: CFLAGS lists the flags that will be used by the compiler defined above. Each dash represents a precursor for another flag.  -Wall enables the compiler to display warning messages upon compilation, such as declared but unused variables within the program. -Wextra provides more potential warnings. -g enables the compiler to provide debugging information, and -O3 enables possible optimizations within the program to further reduce the computation time.
+\codebox{CFLAGS= -Wall -Wextra -g -O2 \$(shell pkg-config --cflags libpng)}: CFLAGS lists the flags that will be used by the compiler defined above. Each dash represents a precursor for another flag.  -Wall enables the compiler to display warning messages upon compilation, such as declared but unused variables within the program. -Wextra provides more potential warnings. -g enables the compiler to provide debugging information, and -O2 enables possible optimizations within the program to further reduce the computation time. The elements within the brackets configure the \codebox{libpng} package, which is needed for the sparse patterns.
 
-\codebox{TARGET=GA}: TARGET defines the name of the final executable that will be placed in the same directory. This name ('GA' in this case) will need to be called in the command line to run the program.
+\codebox{LIBS=\$(shell pkg-config --libs libpng)}: Necessary for ligpng, helps configure libpng via the linker flag.
 
-\codebox{SRC=GA.c functions.c OF.c}: Define the source files containing C code that need to be compiled. Did not include functions.h because it is a header file and only contains function prototypes; not executable C code.
+\codebox{all: bicgstab}: Defines bicgstab as the default target when running \codebox{make} without any following arguments.
 
-\codebox{OBJ=\$(SRC:.c=.o)}: Creates object files with .o extension for each of the files defined in the SRC component above.
-
-\codebox{\$(TARGET): \$(OBJ)}: This states that the target files are dependent on the object files. Thus, if there are changes made to the object files defined above, the target (GA) will need to be rebuilt.
-
-\codebox{\$(CC) \$(CFLAGS) -o \$(TARGET) \$(OBJ)}: Responsible for building the target file, GA, from the compiler. With this, it sends along the flags and other specified parameters as defined above.
-
-\codebox{\%.o: \%.c}: This is a pattern rule. It defines how to generate the .o file from the .c file.
-
-\codebox{\$(CC) \$(CFLAGS) -c \$<}: Command that is run which helps the construction of an object file from a C file. This command passes the flags specified in \codebox{CFLAGS}. The -c option causes the compiler to generate the object file.
+\codebox{bicgstab}, \codebox{main.o}, and \codebox{functions.o}: These compile \codebox{main.c} and \codebox{functions.c} into object files which are dependent on \codebox{functions.h}
 
 \codebox{clean}: This is an independent rule. It does not depend on any of the parameters defined above.
 
@@ -302,7 +294,57 @@ The VTune and gcov portions of this assignment could not be completed because VT
 
 \subsection{CSR Formatting}
 
-Add CSR format of LFAT5.mtx.
+The CSR format of LFAT5.mtx can be seen below:
+
+ 	\begin{mdframed}[style=myboxstyleTerminal1]
+		\begin{verbatim}
+
+Number of Non-Zeros: 46
+Row Pointer: 0 3 5 7 11 15 18 21 26 31 33 35 39 43 46 
+Column Index: 0 3 4 1 5 2 6 0 3 7 8 
+0 4 7 8 1 5 9 2 6 10 3 4 7 11 12 3 4 
+8 11 12 5 9 6 10 7 8 11 13 7 8 12 13 
+11 12 13 
+CSR Data: 1.570880 -94.252800 0.785440 12566400.000000 -6283200.000000 0.608806
+-0.304403 -94.252800 15080.448000 -7540.224000 94.252800 0.785440 3.141760
+-94.252800 0.785440 -6283200.000000 12566400.000000 -6283200.000000 -0.304403
+0.608806 -0.304403 -7540.224000 -94.252800 15080.448000 -7540.224000 94.252800
+94.252800 0.785440 3.141760  -94.252800 0.785440 -6283200.000000 12566400.000000
+-0.304403 0.608806 -7540.224000 -94.252800 15080.448000 94.252800 94.252800
+0.785440 3.141760 0.785440 94.252800 0.785440 1.570880
+
+		\end{verbatim}
+	\end{mdframed}
+
+\subsection{Dependencies}
+
+This program requires \codebox{png.h} in order to execute. 
+
+    To install the dependency on Debian-based Linux, run the following:
+    
+    \codebox{sudo apt-get update}
+    
+    \codebox{sudo apt-get install libpng-dev}
+
+    On MacOS, use Homebrew:
+    
+    \codebox{brew update}
+    
+    \codebox{brew install libpng}
+
+\subsection{Running the Program}
+
+ To run the program, the following commands must be run in the program's directory:
+ 
+ \codebox{make}
+ 
+ \codebox{./bicgstab <filename.mtx>}
+
+ For example, 
+ 
+ \codebox{make}
+ 
+ \codebox{./bicgstab LFAT5.mtx}
 
 \section{Results}
 
@@ -342,6 +384,4 @@ As mentioned in Chapter 1, sparse pattern visualizations were implemented to det
 
 Add the table here.
 
-Add Makefile summary
-	
 \end{document}
