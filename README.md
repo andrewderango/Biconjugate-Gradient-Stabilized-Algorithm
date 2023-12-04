@@ -92,7 +92,7 @@ CSR Data: 1.570880 -94.252800 0.785440 12566400.000000 -6283200.000000 0.608806 
 ```
 
 ### 2.4: Dependencies
-This program requires png.h in order to execute.
+This program requires ```png.h``` in order to execute.
 \
 To install the dependency on Debian-based Linux, run the following:
 ```
@@ -118,4 +118,25 @@ make
 ```
 
 ### 2.6: Sample Output
-Put in Sample Output.
+A sample terminal output for LFAT5.mtx can be seen below:
+```
+andrewderango@Andrews-MacBook-Air-2 Biconjugate-Gradient-Stabilized-Algorithm % ./bicgstab LFAT5.mtx
+I have detected that this matrix is upper triangular. Would you like to symmetrise it? (Y/N): y
+Sparsity pattern image saved to your current directory: Sparsity Pattern Images/LFAT5_sparsity_pattern.png
+
+Matrix Name: LFAT5.mtx
+Matrix Dimensions: 14 x 14
+Number of Non-Zero Values: 46
+Program Runtime: 0.000060 seconds
+Residual Norm: 0.000000
+```
+
+## 3: Results
+
+| Matrix              | Dimensions       | Non-Zeros  | CPU Time (s) | Residual Norm |
+|:-------------------:|:----------------:|:----------:|:------------:|:-------------:|
+| b1_ss.mtx          | 7x7              | 15         | 0.000010     | 0.000000      |
+| LFAT5.mtx           | 14x14            | 46         | 0.000038     | 0.000000      |
+| LF10.mtx            | 18x18            | 82         | 0.000141     | 0.000000      |
+| ex3.mtx             | 1821x1821        | 52685      | 1.011970     | 0.000112      |
+| jnlbrng1.mtx        | 40000x40000      | 199200     | 0.041605     | 0.000000      |
