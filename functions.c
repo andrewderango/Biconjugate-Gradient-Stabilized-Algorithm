@@ -401,7 +401,7 @@ void bicgstab(CSRMatrix *A, double *b, double *x, double tolerance, int max_iter
             }
         }
 
-        printf("Iteration: %d\tResidual: %lf\tBest Residual: %lf\n", iteration, residual, best_residual);
+        // printf("Iteration: %d\tResidual: %lf\tBest Residual: %lf\n", iteration, residual, best_residual);
 
         if (residual < tolerance) {
             break;
