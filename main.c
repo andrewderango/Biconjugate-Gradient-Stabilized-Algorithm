@@ -40,9 +40,7 @@ int main(int argc, char *argv[]) {
 
     // Solve via BiCGSTAB and time it
     clock_t start = clock();
-    bicgstab(csrMatrix, b, x, 1e-7, 10000);
-    
-    // Compute BiCGSTAB residual norm
+    bicgstab(csrMatrix, b, x, 5e-7, 10000);
     double* Ax = (double*)malloc(csrMatrix->num_rows * sizeof(double));
     spmv_csr(csrMatrix, x, Ax);
     double bicgstab_residual = 0.0;
@@ -53,7 +51,7 @@ int main(int argc, char *argv[]) {
     bicgstab_residual = sqrt(bicgstab_residual);
 
     // Solve via Conjugate Gradient
-    conjugate_gradient(csrMatrix, b, x, 1e-7, 10000);
+    conjugate_gradient(csrMatrix, b, x, 5e-7, 10000);
     Ax = (double*)realloc(Ax, csrMatrix->num_rows * sizeof(double));
     spmv_csr(csrMatrix, x, Ax);
     double conj_grad_residual = 0.0;

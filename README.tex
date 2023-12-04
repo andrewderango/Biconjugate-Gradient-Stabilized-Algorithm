@@ -5,6 +5,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{pgfplots}
 \usepackage{tikz}
+\usepackage{booktabs} % For better-looking tables
 \usetikzlibrary{fadings}
 \usepackage{filecontents}
 \usepackage{multirow}
@@ -350,6 +351,28 @@ This program requires \codebox{png.h} in order to execute.
 
 \section{Results}
 
+\subsection{Performance}
+
+\begin{table}[h]
+  \centering
+  \caption{BiCGSTAB Result for Different Matrices}
+  \begin{tabular}{ccccc} % Adjust the number of 'c's based on the number of columns
+    \toprule
+    \textbf{Matrix} & \textbf{Dimensions} & \textbf{Non-Zeros} & \textbf{CPU Time (s)} & \textbf{Residual Norm} \\
+    \midrule
+    b1\_ss.mtx         & 7x7             & 15       & 0.000010  & 0.000000 \\
+    LFAT5.mtx          & 14x14           & 46       & 0.000038  & 0.000000 \\
+    LF10.mtx           & 18x18           & 82       & 0.000141  & 0.000000 \\
+    ex3.mtx            & 1821x1821       & 52685    & 1.011970  & 0.000112 \\
+    jnlbrng1.mtx       & 40000x40000     & 199200   & 0.041605  & 0.000000 \\
+    ACTIVSg70K.mtx     & 69999x69999     & 238627   & 14.121449 & 7595.457651 \\
+    2cubes\_sphere.mtx & 101492x101492   & 1647264  & 66.212776 & 87.843514 \\
+    tmt\_sym.mtx       & 726713x726713   & 2903837  & 91.981226 & 0.182784 \\
+    StocF-1465.mtx     & 1465137x1465137 & 11235263 & 84.903552 & 8179.010486 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 \subsection{Sparse Pattern Visualization}
 
 As mentioned in Chapter 1, sparse pattern visualizations were implemented to determine the pattern of non-zero numbers in the input matrix. These can be seen below:
@@ -381,9 +404,5 @@ As mentioned in Chapter 1, sparse pattern visualizations were implemented to det
   \caption{Sparse Pattern Image of \codebox{ex3.mtx}.}
   \label{fig:your_image}
 \end{figure}
-
-\subsection{Performance}
-
-Add the table here.
 
 \end{document}

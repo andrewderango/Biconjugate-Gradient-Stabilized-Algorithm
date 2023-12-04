@@ -401,7 +401,7 @@ void bicgstab(CSRMatrix *A, double *b, double *x, double tolerance, int max_iter
             }
         }
 
-        // printf("Iteration: %d\tResidual: %lf\n", iteration, residual);
+        printf("Iteration: %d\tResidual: %lf\tBest Residual: %lf\n", iteration, residual, best_residual);
 
         if (residual < tolerance) {
             break;
@@ -468,11 +468,16 @@ void conjugate_gradient(CSRMatrix* A, double* b, double* x, double tolerance, in
             p[i] = r[i] + beta * p[i];
         }
         r_dot_r = r_dot_r_new;
+
+        // Compute the residual norm
         double residual = 0.0;
+        double* Ax = (double*)malloc(A->num_rows * sizeof(double));
+        spmv_csr(A, x, Ax);
         for (int i = 0; i < A->num_rows; i++) {
-            residual += r[i] * r[i];
+            residual += (Ax[i] - b[i]) * (Ax[i] - b[i]); // Residual = Ax - b
         }
         residual = sqrt(residual);
+        free(Ax);
 
         if (iteration == 0 || residual < best_residual) {
             best_residual = residual;
@@ -481,12 +486,12 @@ void conjugate_gradient(CSRMatrix* A, double* b, double* x, double tolerance, in
             }
         }
 
-        // printf("Iteration: %d\tResidual: %lf\n", iteration, residual);
+        // printf("Iteration: %d\tResidual: %lf\tBest Residual: %lf\n", iteration, residual, best_residual);
 
         if (residual < tolerance) {
             residual = best_residual;
             break;
-        }
+        } 
     }
 
     free(r);
@@ -496,4 +501,5 @@ void conjugate_gradient(CSRMatrix* A, double* b, double* x, double tolerance, in
     for (int i = 0; i < A->num_rows; i++) {
         x[i] = best_x[i];
     }
+    // printf("Residual: %f\n", best_residual);
 }
