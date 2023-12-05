@@ -259,7 +259,8 @@ Both the BiCGSTAB and Conjugate Gradient algorithms take in the parameters \code
 		\begin{verbatim}
   
 CC = gcc
-CFLAGS = -Wall -Wextra -g -lm -O2 $(shell pkg-config --cflags libpng)
+CFLAGS = -Wall -Wextra -g -lm -O2 -fprofile-arcs -ftest-coverage 
+    $(shell pkg-config --cflags libpng)
 LIBS = $(shell pkg-config --libs libpng)
 
 all: bicgstab
@@ -270,6 +271,9 @@ bicgstab: main.c functions.c functions.h
 clean:
 	rm -f bicgstab
 	rm -rf bicgstab.dSYM
+	rm -f *.gcda
+	rm -f *.gcno
+	rm -f *.gcov
 		\end{verbatim}
 	\end{mdframed}
 
@@ -277,7 +281,7 @@ This Makefile is a set of instructions instigated from the command line that aid
 
 \codebox{CC = gcc}: \codebox{CC} sets the compiler that will be used to compile the program. In this case, we are using gcc.
 
-\codebox{CFLAGS = -Wall -Wextra -g -lm -O2 \$(shell pkg-config --cflags libpng)}: \codebox{CFLAGS} lists the flags that will be used by the compiler defined above. Each dash represents a precursor for another flag. \codebox{-Wall} enables the compiler to display warning messages upon compilation, such as declared but unused variables within the program. \codebox{-Wextra} provides more potential warnings. \codebox{-g} enables the compiler to provide debugging information, and \codebox{-lm} helps connect the \codebox{math.h} header used for other files. \codebox{-O2} enables possible optimizations within the program to further reduce the computation time. The elements within the brackets configure the \codebox{libpng} package, which is needed for the sparse patterns.
+\codebox{CFLAGS = -Wall -Wextra -g -lm -O2 \$(shell pkg-config --cflags libpng)}: \codebox{CFLAGS} lists the flags that will be used by the compiler defined above. Each dash represents a precursor for another flag. \codebox{-Wall} enables the compiler to display warning messages upon compilation, such as declared but unused variables within the program. \codebox{-Wextra} provides more potential warnings. \codebox{-g} enables the compiler to provide debugging information, and \codebox{-lm} helps connect the \codebox{math.h} header used for other files. \codebox{-O2} enables possible optimizations within the program to further reduce the computation time. \codebox{-fprofile-arcs} and \codebox{-ftest-coverage} support gcov profiling, which is shown at the bottom of this README document. The elements within the brackets configure the \codebox{libpng} package, which is needed for the sparse patterns.
 
 \codebox{LIBS=\$(shell pkg-config --libs libpng)}: Necessary for ligpng, helps configure libpng via the linker flag.
 
@@ -285,7 +289,7 @@ This Makefile is a set of instructions instigated from the command line that aid
 
 \codebox{bicgstab}: \codebox{main.c}, \codebox{functions.c}, \codebox{functions.h}: This is the rule for building the target \codebox{bicgstab}. The target is built depending on \codebox{main.c}, \codebox{functions.c}, and \codebox{functions.h}. This is the part of the Makefile responsible for creating just one object file despite multiple C files. The line below, \codebox{\$(CC) \$(CFLAGS) -o bicgstab main.c functions.c \$(LIBS)}, is responsible for building the target if it needs to be rebuilt.
 
-\codebox{clean}: This is an independent rule. It does not depend on any of the parameters defined above. If the user runs the command \codebox{make clean} in the command line, then the listed files will be removed from the system. In the Makefile shown above, the \codebox{bicgstab} and \codebox{bicgstab.dSYM}, which are created upon compilation, will be deleted if the user executes the command \codebox{make clean}.
+\codebox{clean}: This is an independent rule. It does not depend on any of the parameters defined above. If the user runs the command \codebox{make clean} in the command line, then the listed files will be removed from the system. In the Makefile shown above, the \codebox{bicgstab}, \codebox{bicgstab.dSYM}, and gcov files, which are created upon compilation, will be deleted if the user executes the command \codebox{make clean}.
 
 \subsection{VTune Analysis}
 
