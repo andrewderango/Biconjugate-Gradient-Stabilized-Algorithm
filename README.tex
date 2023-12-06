@@ -291,10 +291,6 @@ This Makefile is a set of instructions instigated from the command line that aid
 
 \codebox{clean}: This is an independent rule. It does not depend on any of the parameters defined above. If the user runs the command \codebox{make clean} in the command line, then the listed files will be removed from the system. In the Makefile shown above, the \codebox{bicgstab}, \codebox{bicgstab.dSYM}, and gcov files, which are created upon compilation, will be deleted if the user executes the command \codebox{make clean}.
 
-\subsection{VTune Analysis}
-
-The VTune portion of this assignment could not be completed because VTune is not available on Apple silicon processors.
-
 \subsection{CSR Formatting}
 
 The CSR format of LFAT5.mtx can be seen below:
@@ -1097,9 +1093,21 @@ Gcov reports were retrieved to further investigate the profiling of the program.
        14:  503:    }
         -:  504:    // printf("Residual: %f\n", best_residual);
         1:  505:}
-
 		\end{verbatim}
 	\end{mdframed}
+
+\subsection{VTune Analysis}
+
+Further profiling of the program was done in VTune to acquire deeper insights into its performance. The VTune report for \codebox{jnlbrng1.mtx} as the A matrix is shown in the image below.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{vtune_report.png}
+  \caption{VTune report of \codebox{jnlbrng1.mtx}.}
+  \label{fig:your_image}
+\end{figure}
+
+\newpage
 
 \subsection{Sparse Pattern Visualization}
 
