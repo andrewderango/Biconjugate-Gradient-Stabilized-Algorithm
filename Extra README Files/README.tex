@@ -1,0 +1,365 @@
+\documentclass[12pt]{article}
+\usepackage{ragged2e} % load the package for justification
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usetikzlibrary{fadings}
+\usepackage{filecontents}
+\usepackage{multirow}
+\usepackage{amsmath}
+\pgfplotsset{width=10cm,compat=1.17}
+\setlength{\parskip}{0.75em} % Set the space between paragraphs
+\usepackage{setspace}
+\setstretch{1.2} % Adjust the value as per your preference
+\usepackage[margin=2cm]{geometry} % Adjust the margin
+\setlength{\parindent}{0pt} % Adjust the value for starting paragraph
+\usetikzlibrary{arrows.meta}
+\usepackage{mdframed}
+\usepackage{float}
+
+\usepackage{hyperref}
+
+% to remove the hyperline rectangle
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=blue
+}
+
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{lipsum} % Example text package
+\usepackage{fancyhdr} % Package for customizing headers and footers
+
+
+
+% Define the orange color
+\definecolor{myorange}{RGB}{255,65,0}
+% Define a new color for "cherry" (dark red)
+\definecolor{cherry}{RGB}{148,0,25}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apply the custom footer to all pages
+\pagestyle{fancy}
+
+% Redefine the header format
+\fancyhead{}
+\fancyhead[R]{\textcolor{orange!80!black}{\itshape\leftmark}}
+
+\fancyhead[L]{\textcolor{black}{\thepage}}
+
+
+% Redefine the footer format with a line before each footnote
+\fancyfoot{}
+\fancyfoot[C]{\footnotesize P. Pasandide, McMaster University, Programming for Mechatronics - MECHTRON 2MP3. \footnoterule}
+
+% Redefine the footnote rule
+\renewcommand{\footnoterule}{\vspace*{-3pt}\noindent\rule{0.0\columnwidth}{0.4pt}\vspace*{2.6pt}}
+
+% Set the header rule color to orange
+\renewcommand{\headrule}{\color{orange!80!black}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}
+
+% Set the footer rule color to orange (optional)
+\renewcommand{\footrule}{\color{black}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Set the color for the section headings
+\titleformat{\section}
+{\normalfont\Large\bfseries\color{orange!80!black}}{\thesection}{1em}{}
+
+% Set the color for the subsection headings
+\titleformat{\subsection}
+{\normalfont\large\bfseries\color{orange!80!black}}{\thesubsection}{1em}{}
+
+% Set the color for the subsubsection headings
+\titleformat{\subsubsection}
+{\normalfont\normalsize\bfseries\color{orange!80!black}}{\thesubsubsection}{1em}{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the color for the table of contents
+\titlecontents{section}
+[1.5em]{\color{orange!80!black}}
+{\contentslabel{1.5em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+% Set the color for the subsections in the table of contents
+\titlecontents{subsection}
+[3.8em]{\color{orange!80!black}}
+{\contentslabel{2.3em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+% Set the color for the subsubsections in the table of contents
+\titlecontents{subsubsection}
+[6em]{\color{orange!80!black}}
+{\contentslabel{3em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% set a format for the codes inside a box with C format
+\lstset{
+	language=C,
+	basicstyle=\ttfamily,
+	backgroundcolor=\color{blue!5},
+	keywordstyle=\color{blue},
+	commentstyle=\color{codegreen},
+	stringstyle=\color{red},
+	showstringspaces=false,
+	breaklines=true,
+	frame=single,
+	rulecolor=\color{lightgray!35}, % Set the color of the frame
+	numbers=none,
+	numberstyle=\tiny,
+	numbersep=5pt,
+	tabsize=1,
+	morekeywords={include},
+	alsoletter={\#},
+	otherkeywords={\#}
+}
+
+
+
+
+%\input listings.tex
+
+
+
+% Define a command for inline code snippets with a colored and rounded box
+\newtcbox{\codebox}[1][gray]{on line, boxrule=0.2pt, colback=blue!5, colframe=#1, fontupper=\color{cherry}\ttfamily, arc=2pt, boxsep=0pt, left=2pt, right=2pt, top=3pt, bottom=2pt}
+
+
+
+
+\tikzset{%
+	every neuron/.style={
+		circle,
+		draw,
+		minimum size=1cm
+	},
+	neuron missing/.style={
+		draw=none, 
+		scale=4,
+		text height=0.333cm,
+		execute at begin node=\color{black}$\vdots$
+	},
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define a new tcolorbox style with default options
+\tcbset{
+	myboxstyle/.style={
+		colback=orange!10,
+		colframe=orange!80!black,
+	}
+}
+
+% Define a new tcolorbox style with default options to print the output with terminal style
+
+
+\tcbset{
+	myboxstyleTerminal/.style={
+		colback=blue!5,
+		frame empty, % Set frame to empty to remove the fram
+	}
+}
+
+\mdfdefinestyle{myboxstyleTerminal1}{
+	backgroundcolor=blue!5,
+	hidealllines=true, % Remove all lines (frame)
+	leftline=false,     % Add a left line
+}
+
+
+\begin{document}
+	
+	\justifying
+	
+	\begin{center}
+		\textbf{{\large MECHTRON 2MP3 Assignment 2}}
+		
+		\textbf{Developing a Basic Genetic Optimization Algorithm in C} 
+		
+		Andrew De Rango, 400455362
+	\end{center}
+	
+		
+	
+	
+	\section{Programming the Genetic Algorithm}
+
+	\subsection{Implementation}
+	
+	The code can be broken down into 4 files:
+	
+	\begin{itemize}
+		\item \codebox{OF.c}: Computes the Ackley function given any number of variables.
+		\item \codebox{functions.h}: Contains function prototypes.
+		\item \codebox{GA.c}: Contains the main function.
+		\item \codebox{functions.c}: Defines and executes functions such as crossover, mutation, population initialization, etc.
+	\end{itemize}
+	
+	The number of decision variables in the optimization problem is set to 2 by default, with upper and lower bounds for both decision variables set to +5 and -5, respectively. This is the recommended search range for a two-dimensional optimization test for the Ackley function. To change this, visit the following lines:
+	
+	\begin{lstlisting}
+		int NUM_VARIABLES = 2;
+		double Lbound[] = {-5.0, -5.0};
+		double Ubound[] = {5.0, 5.0};
+	\end{lstlisting}
+	
+	\begin{mdframed}[style=myboxstyleTerminal1]
+		\begin{verbatim}
+			Genetic Algorithm is initiated.
+			------------------------------------------------
+			The number of variables: 2
+			Lower bounds: [-5.000000, -5.000000]
+			Upper bounds: [5.000000, 5.000000]
+			
+			Population Size:   100
+			Max Generations:   10000
+			Crossover Rate:    0.500000
+			Mutation Rate:     0.200000
+			Stopping criteria: 0.0000000000000001
+			
+			Results
+			------------------------------------------------
+			CPU time: 0.012754 seconds
+			Best solution found: (-0.000127286184639, 0.002088050824631)
+			Best fitness: 0.006033388506971
+		\end{verbatim}
+	\end{mdframed}
+	
+	 
+	\begin{table}[h!]
+		\caption{Results with Crossover Rate = 0.5 and Mutation Rate = 0.05}
+		\label{table:1}
+		\centering
+		\begin{tabular}{c c c c c c}
+			\hline
+			Pop Size & Max Gen & \multicolumn{3}{c}{Best Solution} & CPU time (Sec) \\
+			& & $x_1$ & $x_2$ & Fitness & \\
+			\hline
+			10 & 100 & 0.043437976876012 & -0.904300755776605 & 2.677441414918161 & 0.000115\\
+   			100 & 100 & 0.004633187784177 & 0.004663432484802 & 0.019743731092440 & 0.001359\\
+			1000 & 100 & -0.000112175475858 & 0.000729511957955 & 0.002102128938884 & 0.009205\\
+			10000 & 100 & 0.000066997017742 & 
+0.000116287265027 & 0.000380072324405 & 0.377696\\
+			\hline
+			1000 & 1000 & 0.002301421483187 & 0.000252665486304 & 0.006691246774786 & 0.009532\\
+			1000 & 10000 & -0.000127286184639 & 0.002088050824631 & 0.006033388506971 & 0.012754 \\
+			1000 & 100000 & -0.004743256142709 & 0.009201655634307 & 0.032132114007670 & 0.012977 \\
+			1000 & 1000000 & 0.009314462081210 & -0.004746329507207 & 0.032476328127761 & 0.017277 \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	\begin{table}[h!]
+		\caption{Results with Crossover Rate = 0.5 and Mutation Rate = 0.2}
+		\label{table:2}
+		\centering
+		\begin{tabular}{c c c c c c}
+			\hline
+			Pop Size & Max Gen & \multicolumn{3}{c}{Best Solution} & CPU time (Sec) \\
+			& & $x_1$ & $x_2$ & Fitness & \\
+			\hline
+			10  & 100    &  -0.011278062598444&  0.019696436365925& 0.077864075069045&0.000080\\
+			100 & 100    &  0.043074449078681&  0.020379226198597& 0.194258202498812&0.001218\\
+			1000& 100    &  -0.000641841907353&   -0.000256060157091& 0.001967254744301&0.037911\\
+			10000& 100    &  0.000013338867582&   0.000035285484062& 0.000106733375379&0.910979\\
+			\hline
+			1000  & 1000   &  0.001356226858383& 0.002428398003070& 0.008073129104510&0.028995\\
+			1000 & 10000  &  0.000922891777438&  -0.001703875605810& 0.005580803229666&0.029390\\
+			1000& 100000 &  -0.001054171007617&   0.000625157263421& 0.003506521480777&0.025726\\
+			1000& 1000000 &  -0.000289760064469&   -0.000070461537722& 0.000845816690682&0.043721\\
+			\hline
+		\end{tabular}
+	\end{table}
+	Note that the above tables were produced without the implementation of the optimized crossover and mutation function. The optimized crossover and mutation functions provide significant increases to the genetic algorithm's accuracy. The results are shown below and can be compared to the tables above to see the effect of the improved crossover and mutation functions.
+	
+	\subsection{Makefile Summary}
+	
+	The Makefile supplied with the Genetic Algorithm repository can be seen below:
+
+ 	\begin{mdframed}[style=myboxstyleTerminal1]
+		\begin{verbatim}
+  
+CC = gcc
+CFLAGS = -Wall -g -O3
+
+all: GA
+
+GA: GA.c OF.c functions.c functions.h
+    $(CC) $(CFLAGS) -o GA GA.c OF.c functions.c -lm
+
+clean:
+    rm -f $(OBJ) $(TARGET)
+		\end{verbatim}
+	\end{mdframed}
+
+This Makefile is a set of instructions instigated from the command line that aids in the compilation and linking processes of potentially multiple source code files. An example is shown in the code block above. Here are the roles of the individual components within the Makefile:
+
+\codebox{CC = gcc}: CC sets the compiler that will be used to compile the program. In this case, we are using gcc.
+
+\codebox{CFLAGS = -Wall -g -O3}: CFLAGS lists the flags that will be used by the compiler defined above. Each dash represents a precursor for another flag.  -Wall enables the compiler to display warning messages upon compilation, such as declared but unused variables within the program. -g enables the compiler to provide debugging information, and -O3 enables possible optimizations within the program to further reduce the computation time.
+
+\codebox{GA: GA.c OF.c functions.c functions.h}: This line is where the target is built. We are naming the target \codebox{GA}, as defined by the first two characters of this line. The parameters after the colon dictate which files the target is dependent on; in this case, \codebox{GA} is dependent on \codebox{GA.c}, \codebox{OF.c}, \codebox{functions.c}, and \codebox{functions.h}.
+
+\codebox{\$(CC) \$(CFLAGS) -o GA GA.c OF.c fucntions.c -lm}: When \codebox{make} is run in the command line, this is the command that will be run. It is responsible for building the target, as described above. This command uses the defined compiler and flags listed above. \codebox{-o GA} names executable file \codebox{GA}. After listing which files need to be compiled, it includes the \codebox{-lm} flag to link with the \codebox{math.h} library.
+
+\codebox{clean}: This is an independent rule. It does not depend on any of the parameters defined above.
+
+\codebox{rm -f \$(OBJ) \$(TARGET)}: If the user runs the command \codebox{make clean} in the command line, then this is the function that will be executed. It removes the object files and final executable to clean up to the repository.
+	
+	\subsection{Improving the Performance - Bonus}
+	
+A variety of changes were made to the \codebox{functions.c} file. Some were made to hasten the computational process, and some to improve the accuracy of the program. Permission was given by the instructor to alter the \codebox{functions.h} in order to pass  the generations variable into the mutation function, on the basis of significant accuracy improvement. The pronounced changes are summarized below. The altered \codebox{functions.h} file has been submitted.
+
+The first and most important change was to the mutation function. Instead of randomly mutating to any point within the defined range, which provides a very small probability that the mutation will drive a strong solution. Therefore, I decided to adjust the mutation to be generation-dependent. As the generations increase, the range of which genes mutate converges to 0 about the point of best fitness. This works with functions whose global minimum isn't (0, 0, ...) because the early generations are likely to find the hole of the global max, and then the range slowly converges around that point to permit extreme accuracy. So for the first generations, the mutation range is still as defined or very close, which permits genetic diversity. This technique was validated on a variety of functions with large ranges, more independent variables, and different characteristics. This includes the Ackley function, the Rastrigin function, the Beale function, the Levi function N. 13, and the Himmelblau function. The results were all very close to the true global minimum.
+
+Next, I changed the method in which certain individuals were selected, based on any probability regardless of how the probability was calculated. This was done by creating another array that summed each of the probabilities, and then generated a random double between 0 and 1, then found the individual that corresponded to this random double. The optimized part was that this search was done using binary search, which improved the time complexity to logarithmic. Previously, this was done by starting from the first index and iterating through the array until the associated individual was found. This change produced a noticeable effect.
+
+Finally, I also changed the crossover function so that more fit individuals are more likely to have their genes crossed than less fit individuals. The probabilities were based on a normalized value of the exponential of their z-score relative to the rest of the population. This provides extra crossover strength to very strong individuals, and removes crossover strength from weaker individuals, even more so relative to the simple normalized 1/fitness used for determining intergenerational individuals.
+
+Although these changes decrease the genetic diversity of the population, they do so at a sufficiently late generation, so that the global minimum is found prior to convergence. The technique may render bad results with very low population counts or a very large initial search range, but these are functions that also pose difficulties to standard genetic algorithms.
+
+These adjustments provide the following results:
+
+
+
+	\begin{table}[h!]
+		\caption{Results with Crossover Rate = 0.5 and Mutation Rate = 0.2}
+		\label{table:3}
+		\centering
+		\begin{tabular}{c c c c c c}
+			\hline
+			Pop Size & Max Gen & \multicolumn{3}{c}{Best Solution} & CPU time (Sec) \\
+			& & $x_1$ & $x_2$ & Fitness & \\
+			100 & 100    &  0.000000064633813&  -0.000000348628304& 0.000001002876119&0.004836\\
+			1000& 100    &  0.000000000000000&   -0.000000000000000& 0.000000000000000&0.023476\\
+			10000& 100    &  0.000000000000000&   -0.000000000000000& 0.000000000000000&0.285449\\
+			\hline
+			1000  & 1000   &  0.000000000000000& 0.000000000000000& 0.000000000000000&0.022813\\
+			1000 & 10000  &  0.000000000000000&  0.000000000000000& 0.000000000000000&0.022514\\
+			1000& 100000 &  -0.000000000000000&   0.000000000000000& 0.000000000000000&0.023436\\
+		\end{tabular}
+	\end{table}
+	
+	
+
+	 
+
+	
+	
+\end{document}
