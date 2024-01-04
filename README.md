@@ -1,5 +1,5 @@
 # Biconjugate Gradient Stabilized Algorithm
-This README.md file is transcribed from LaTeX. To view the PDF version, click [here](https://github.com/andrewderango/Biconjugate-Gradient-Stabilized-Algorithm/blob/main/README.pdf).
+This README.md file is a transcribed from LaTeX and summarized. To view the full PDF version, click [here](https://github.com/andrewderango/Biconjugate-Gradient-Stabilized-Algorithm/blob/main/Extra%20README%20Files/README.pdf).
 
 ## 1: Introduction
 
